@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+
+
+@theme {
+  /* --- SURFACE & CANVAS --- */
+  --color-base: #f1f5f9;       /* Page background */
+  --color-surface: #ffffff;    /* Card/Module background */
+  --color-overlay: #00000080;  /* Backdrop */
+
+  /* --- CONTENT --- */
+  --color-content-main: #0f172a;    /* Primary text */
+  --color-content-muted: #475569;   /* Secondary text */
+  --color-content-disabled: #94a3b8;
+  --color-content-inverse: #ffffff;  /* Text on dark backgrounds */
+
+  /* --- INTERACTIVE --- */
+  --color-accent: #6366f1;           /* Primary brand/action color */
+  --color-accent-hover: #4f46e5;
+  --color-accent-active: #3730a3;
+  
+  /* --- BORDERS --- */
+  --color-stroke: #e2e8f0;           /* Default borders */
+  --color-stroke-strong: #6366f1;    /* Focus/Active borders */
+
+  /* --- EFFECTS --- */
+  --shadow-subtle: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  --shadow-strong: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+/* Dark Mode Mapping */
+@variant dark (&:where(.dark, .dark *));
+
+.dark {
+  /* We redefine the SAME variables with dark-theme values */
+  --color-base: #0f172a;
+  --color-surface: #1e293b;
+  
+  --color-content-main: #f1f5f9;
+  --color-content-muted: #94a3b8;
+  
+  --color-accent: #818cf8;
+  --color-accent-hover: #a5b4fc;
+  --color-stroke: #334155;
+}
