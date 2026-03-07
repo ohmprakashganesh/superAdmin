@@ -1,59 +1,62 @@
-import { Card } from '../../components/ui/Card'
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon } from "lucide-react";
 
 interface MainCardProps {
-  topIcon: LucideIcon;
-  bottomIcon: LucideIcon;
+  icon: LucideIcon;
   title: string;
-  subTitle: string;
-  content: string | number;
-  gradientClass?: string; // Allow different colors
+  value: string | number;
+  trend?: number;
+  iconColor: LucideIcon; // e.g., "text-blue-600"
+  iconBg: string;    // e.g., "bg-blue-50"
+  extraInfo?: React.ReactNode;
 }
 
 const MainCard = ({ 
-  topIcon: TopIcon, 
-  bottomIcon: BottomIcon, 
+  icon: Icon, 
   title, 
-  subTitle, 
-  content,
-  gradientClass = "from-purple-600 to-indigo-700" // Default color
+  value, 
+  trend, 
+  iconColor, 
+  iconBg, 
+  extraInfo 
 }: MainCardProps) => {
   return (
-    <Card className={`relative overflow-hidden border-none bg-gradient-to-br ${gradientClass} p-6 text-white shadow-xl transition-all hover:scale-[1.02]`}>
-      {/* Decorative background circle */}
-      <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10 blur-2xl" />
+    <div className="group relative bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+      {/* Subtle Background Decoration */}
+      <div className={`absolute -right-4 -top-4 w-24 h-24 ${iconBg} opacity-20 rounded-full blur-2xl group-hover:opacity-40 transition-opacity`} />
 
-      <div className="flex items-start justify-between">
-        <div className="space-y-4">
-          {/* Header Area */}
-          <div className="flex items-center gap-2">
-            <div className="rounded-lg bg-white/20 p-2 backdrop-blur-md">
-              <TopIcon className="h-5 w-5 text-white" />
-            </div>
-            <span className="text-sm font-medium tracking-wide text-white/90 uppercase">
-              {title}
-            </span>
+      <div className="relative z-10">
+        <div className="flex items-center justify-between mb-4">
+          {/* Icon Container with Glassmorphism effect */}
+          <div className={`w-12 h-12 ${iconBg} ${iconColor} rounded-xl flex items-center justify-center shadow-inner`}>
+            <Icon size={24} strokeWidth={2.5} />
           </div>
-
-          {/* Stats Area */}
-          <div>
-            <h3 className="text-4xl font-bold tracking-tight">{content}</h3>
-            <div className="mt-1 flex items-center gap-1 text-xs text-white/70">
-              <BottomIcon className="h-3 w-3" />
-              <span>{subTitle}</span>
+          
+          {/* Trend Badge */}
+          {trend && (
+            <div className="flex flex-col items-end">
+              <span className="flex items-center gap-1 text-xs font-bold text-green-600 bg-green-50 px-2.5 py-1 rounded-full border border-green-100">
+                <span className="text-[10px]">▲</span> {trend}%
+              </span>
             </div>
-          </div>
+          )}
         </div>
 
-        {/* Status Indicator */}
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20 text-white shadow-inner backdrop-blur-sm">
-          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
+        <div>
+          <h3 className="text-sm font-medium text-gray-500 mb-1">{title}</h3>
+          <p className="text-3xl font-extrabold text-gray-900 tracking-tight">
+            {value}
+          </p>
         </div>
+
+        {/* Dynamic Footer Section */}
+        {extraInfo && (
+          <div className="mt-4 pt-4 border-t border-gray-50">
+            {extraInfo}
+          </div>
+        )}
       </div>
-    </Card>
-  )
-}
+    </div>
+  );
+};
 
 export default MainCard;

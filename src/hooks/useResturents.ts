@@ -9,6 +9,9 @@ import {
   updateRestaurant,
   deleteRestaurant,
   setSelectedRestaurant,
+  openEditForm,
+  openProfile,
+  cancelModal, // Add this import
 } from '../redux/resturentSlice';
 
 import type { Restaurant } from '../types/types';
@@ -16,9 +19,14 @@ import type { Restaurant } from '../types/types';
 export const useRestaurants = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { restaurants, loading, error, selectedRestaurant } = useSelector(
-    (state: RootState) => state.restaurants
-  );
+ const { 
+    restaurants, 
+    loading, 
+    error, 
+    selectedRestaurant, 
+    isFormOpen, 
+    isProfileOpen 
+  } = useSelector((state: RootState) => state.restaurants);
 
   useEffect(() => {
     dispatch(fetchRestaurants());
@@ -39,15 +47,31 @@ export const useRestaurants = () => {
   const selectRestaurant = (restaurant: Restaurant | null) => {
     dispatch(setSelectedRestaurant(restaurant));
   };
+   const showProfile=(restaurant:Resturant)=>{
+   return dispatch(openProfile(restaurant));
+   };
 
-  return {
+    const showEditForm=(restaurant:Resturant)=>{
+      return dispatch(openEditForm(restaurant));
+    };
+    
+    const closeModal = () => {
+    return dispatch(cancelModal()); 
+  };
+
+ return {
     restaurants,
     loading,
     error,
     selectedRestaurant,
+    isFormOpen,    // Now correctly returned from selector
+    isProfileOpen, // Now correctly returned from selector
     addRestaurant,
     editRestaurant,
     removeRestaurant,
     selectRestaurant,
+    showEditForm,
+    showProfile,
+    closeModal,
   };
 };

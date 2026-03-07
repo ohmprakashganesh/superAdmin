@@ -1,151 +1,211 @@
-// components/restaurants/RestaurantList.tsx
 import React, { useState } from 'react';
-import type { Restaurant } from '../../types/types';
-import PrimaryBtn from '../../components/ui/PrimaryBtn';
-import { ClockIcon, CreditCardIcon, Layout, PlusIcon, ShieldCheck, TicketIcon, TrendingUp, TrendingUpIcon } from 'lucide-react';
-import { RestaurantForm } from '../../components/formUi/ResturentForm';
-import { RestaurantList } from '../../components/ui/ResturentList';
-import { useRestaurants } from '../../hooks/useResturents';
+import type { CompanyProfileProps } from '../../types/types';
 import MainCard from './MainCard';
-import { BuildingStorefrontIcon, CheckBadgeIcon } from '@heroicons/react/24/outline';
+import { mockCompanies } from './data';
+import { mockRevenueData } from './data';
+import { DollarSign, UploadCloud, User, Users2Icon } from 'lucide-react';
+import PlanDistribution from './PlanDistribution';
+import RevenueTrend from './RevenueTrend';
+import RecentSubs from './RecentSubs';
+import QuickAction from './QuickAction';
+interface SuperAdminOverviewProps {
+  companies?: CompanyProfileProps['company'][];
+  onClose: () => void;
+  onViewCompany: (companyId: string) => void;
+}
 
-export const Dashboard: React.FC = () => {
-  const {
-    restaurants,
-    loading,
-    error,
-    selectedRestaurant,
-    addRestaurant,
-    editRestaurant,
-    removeRestaurant,
-    selectRestaurant,
-  } = useRestaurants();
+export interface SubscriptionStats {
+  totalSubscribers: number;
+  activeSubscribers: number;
+  suspendedSubscribers: number;
+  totalRevenue: number;
+  monthlyRevenue: number;
+  yearlyRevenue: number;
+  revenueGrowth: number;
+}
+ 
+export interface PlanBreakdown {
+  plan: string;
+  subscriberCount: number;
+  revenue: number;
+  percentage: number;
+  color: string;
+}
 
-   console.log(restaurants);
 
-  const [showForm, setShowForm] = useState(false);
+export interface RevenueData {
+  month: string;
+  revenue: number;
+  subscribers: number;
+}
 
-  const handleCreateRestaurant = async (data: Restaurant) => {
-    try {
-      await addRestaurant(data);
-      setShowForm(false);
-      selectRestaurant(null);
-    } catch (error) {
-      console.error('Failed to create restaurant:', error);
-    }
+const Dashboard: React.FC<SuperAdminOverviewProps> = ({ 
+  companies = [], 
+  onViewCompany 
+}) => {
+  const [timeframe, setTimeframe] = useState<'monthly' | 'yearly'>('monthly');
+  const [selectedPlan, setSelectedPlan] = useState<string>('all');
+
+
+  // Calculate subscription statistics
+  const calculateStats = (): SubscriptionStats => {
+    const companies = mockCompanies;
+    const activeSubscribers = companies.filter(c => c.isActive).length;
+    const suspendedSubscribers = companies.filter(c => !c.isActive).length;
+    
+    // Calculate revenues
+    const monthlyRevenue = companies
+      .filter(c => c.isActive)
+      .reduce((sum, c) => sum + c.monthlyRevenue, 0);
+    
+    const yearlyRevenue = monthlyRevenue * 12;
+    
+    return {
+      totalSubscribers: companies.length,
+      activeSubscribers,
+      suspendedSubscribers,
+      totalRevenue: monthlyRevenue * 12, // Annual revenue
+      monthlyRevenue,
+      yearlyRevenue,
+      revenueGrowth: 23.5, // Mock growth percentage
+    };
   };
 
-  const handleUpdateRestaurant = async (data: Restaurant) => {
-    if (selectedRestaurant?._id) {
-      try {
-        console.log("this is form edit func"+data);
-        await editRestaurant(selectedRestaurant._id, data);
-        setShowForm(false);
-        selectRestaurant(null);
-      } catch (error) {
-        console.error('Failed to update restaurant:', error);
-      }
-    }
-  };
+  // Plan breakdown
 
-  const handleDeleteRestaurant = async (id: string) => {
-    if (window.confirm('Are you sure you want to delete this restaurant?')) {
-      try {
-        await removeRestaurant(id);
-      } catch (error) {
-        console.error('Failed to delete restaurant:', error);
-      }
-    }
-  };
 
-  const handleEdit = (restaurant: Restaurant) => {
-    selectRestaurant(restaurant);
-    setShowForm(true);
-  };
+  
 
-  const handleCancel = () => {
-    setShowForm(false);
-    selectRestaurant(null);
-  };
+  const stats = calculateStats();
 
+  // Recent subscribers
+  const recentSubscribers = [...mockCompanies]
+    .sort((a, b) => new Date(b.joinedDate).getTime() - new Date(a.joinedDate).getTime())
+    .slice(0, 5);
+
+
+    const statItems = [
+    {
+      title: "Total Subscribers",
+      value: stats.totalSubscribers,
+      icon: Users2Icon,
+      iconBg: "bg-blue-100",
+      trend: stats.revenueGrowth,
+      extraInfo: (
+        <div className="flex gap-4 mt-1 text-xs">
+          <span className="text-green-600">● {stats.activeSubscribers} Active</span>
+          <span className="text-red-600">● {stats.suspendedSubscribers} Suspended</span>
+        </div>
+      ),
+    },
+    {
+      title: "Active Subscribers",
+      value: stats.activeSubscribers,
+      icon: User,
+      iconBg: "bg-green-100",
+      extraInfo: (
+        <p className="text-xs text-gray-400">
+          {((stats.activeSubscribers / stats.totalSubscribers) * 100).toFixed(1)}% of total
+        </p>
+      ),
+    },
+    {
+      title: "Monthly Revenue",
+      value: `$${stats.monthlyRevenue.toLocaleString()}`,
+      icon: DollarSign,
+      iconBg: "bg-purple-100",
+      extraInfo: <p className="text-xs text-gray-400">MRR: ${stats.monthlyRevenue.toLocaleString()}</p>,
+    },
+    {
+      title: "Yearly Revenue (Projected)",
+      value: `$${stats.yearlyRevenue.toLocaleString()}`,
+      icon: UploadCloud,
+      iconBg: "bg-indigo-100",
+      extraInfo: <p className="text-xs text-gray-400">ARR: ${stats.yearlyRevenue.toLocaleString()}</p>,
+    },
+  ];
   return (
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex justify-between items-center">    
-          {!showForm && (
-            <div className='w-[300px] mt-290 ml-[60%] absolute'>
-            <PrimaryBtn          
-              onClick={() => setShowForm(true)}
+      <div className='bg-white w-full max-w-7xl h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col'>
+        {/* Timeframe Selector */}
+        <div className="px-6 py-4 bg-gray-50 border-b flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="flex bg-white rounded-lg p-1 shadow-sm">
+              <button
+                onClick={() => setTimeframe('monthly')}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition ${
+                  timeframe === 'monthly' 
+                    ? 'bg-indigo-600 text-white' 
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Monthly
+              </button>
+              <button
+                onClick={() => setTimeframe('yearly')}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition ${
+                  timeframe === 'yearly' 
+                    ? 'bg-indigo-600 text-white' 
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Yearly
+              </button>
+            </div>
+            
+            <select
+              value={selectedPlan}
+              onChange={(e) => setSelectedPlan(e.target.value)}
+              className="px-4 py-2 border rounded-lg text-sm bg-white"
             >
-              <PlusIcon className=" w-5 h-5 mr-2" />
-              Add Restaurant
-            </PrimaryBtn>
-            </div>
-          )}
-        </div>
-
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-            <p className="font-medium">Error</p>
-            <p className="text-sm">{error}</p>
-          </div>
-        )}
-
-        {/* Stats Cards */}          
-       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-  <MainCard 
-    topIcon={BuildingStorefrontIcon} // Use relevant icons
-    bottomIcon={TrendingUpIcon} 
-    title="Total Restaurants" 
-    subTitle="Active in system" 
-    content={restaurants?.length || 0}
-    gradientClass="from-purple-600 to-indigo-700"
-  />
-
-  <MainCard 
-    topIcon={TicketIcon} 
-    bottomIcon={CheckBadgeIcon} 
-    title="Available Plans" 
-    subTitle="Active tiers" 
-    content={"static"}
-    gradientClass="from-blue-600 to-cyan-700"
-  />
-  <MainCard 
-    topIcon={CreditCardIcon} 
-    bottomIcon={ClockIcon} 
-    title="Total Subscriptions" 
-    subTitle="Live accounts" 
-    content={restaurants?.filter(r => new Date(r.subscription.endDate) > new Date()).length || 0}
-    gradientClass="from-emerald-600 to-teal-700"
-  />
-   
-
-        </div>
-        <div className="mt-8">
-          {showForm && (
-            <div className='absolute bg-black/50 overflow-scroll inset-0 w-screen h-screen '>
-              <div className='mx-auto w-[800px] h-[500px]'> 
-            <RestaurantForm
-              initialData={selectedRestaurant}
-              onSubmit={selectedRestaurant ? handleUpdateRestaurant : handleCreateRestaurant}
-              onCancel={handleCancel}
-              loading={loading}
-            />
-            </div>
-             </div>
-          )
-        }
+              <option value="all">All Plans</option>
+              <option value="Basic">Basic</option>
+              <option value="Premium">Premium</option>
+              <option value="Enterprise">Enterprise</option>
+            </select>
           </div>
           
-          
-            <RestaurantList
-              restaurants={restaurants}
-              onEdit={handleEdit}
-              onDelete={handleDeleteRestaurant}
-              loading={loading}
-            />
-       
+          <div className="text-sm text-gray-500">
+            Last updated: {new Date().toLocaleString()}
+          </div>
         </div>
-     
+
+        {/* Main Content */}
+        <div className="flex-1 overflow-y-auto p-6">
+          {/* Key Metrics Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+
+            {statItems.map((item, index) => (
+            <MainCard key={index} {...item} />
+           ))}
+
+          </div>
+
+
+
+
+          {/* Charts and Analytics Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <PlanDistribution />
+
+            {/* Revenue Trend */}
+            <RevenueTrend />
+          </div>
+
+
+
+          {/* Recent Subscribers & Quick Actions */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Recent Subscribers */}
+             <RecentSubs />
+
+            {/* Quick Stats & Actions */}
+              <QuickAction />
+          </div>
+        </div>
+
+      </div>
+
   );
 };
+
+export default Dashboard;

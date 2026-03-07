@@ -1,251 +1,260 @@
-// components/restaurants/RestaurantForm.tsx
 import React, { useState, useEffect } from 'react';
 import { Card } from '../ui/Card';
-
-import type { Restaurant } from '../../types/types';
 import { Input } from '../ui/Input';
 import PrimaryBtn from '../ui/PrimaryBtn';
-import { X } from 'lucide-react';
+import { X, Trash2, Plus, Info } from 'lucide-react';
 import type { Plan } from '../../screens/plans/planType';
 
-interface RestaurantFormProps {
-  initialData?: Restaurant | null;
-  onSubmit: (data: Restaurant) => void;
+interface PlanFormProps {
+  initialData?: Plan | null;
   onCancel: () => void;
   loading?: boolean;
 }
- id: string;
-  name: string;
-  slug:string;
-  types:"Basic|Premium|Gold";
-  price: number;
-  tables:number;
-  billingPeriod: "month" | "year";
-  features: string[];
-  isPopular?: boolean;
-const initialFormState:Plan = {
-      name: '',
-      slug: '',
-      types:'',
-      price:0,
-      tables:0,
-     features:[],
-     isPopular:false,
-    password: '',
 
+const initialFormState: Plan = {
+  id: "",
+  name: '',
+  slug: '',
+  price: 0,
+  tables: 1,
+  features: [""],
+  isPopular: false,
+  types: "Basic",
+  billingPeriod: "month",
+};
 
-
-  };
-
-export const RestaurantForm: React.FC<RestaurantFormProps> = ({
+export const PlanForm: React.FC<PlanFormProps> = ({
   initialData,
-  onSubmit,
   onCancel,
   loading = false,
 }) => {
-  const [formData, setFormData] = useState<Restaurant>(initialFormState);
+  const [formData, setFormData] = useState<Plan>(initialFormState);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    if (initialData) {
-      setFormData(initialData);
-    }
+    setFormData(initialData ? { ...initialData } : initialFormState);
+    setErrors({});
   }, [initialData]);
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
-
-    if (!formData.name.trim()) newErrors.name = 'Restaurant name is required';
-    if (!formData.slug.trim()) newErrors.slug = 'Slug is required';
-    if (formData.tables <= 0) newErrors.tables = 'Number of tables must be greater than 0';
-    if (!formData.owner.name.trim()) newErrors['owner.name'] = 'Owner name is required';
-    if (!formData.owner.email.trim()) {
-      newErrors['owner.email'] = 'Owner email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.owner.email)) {
-      newErrors['owner.email'] = 'Email is invalid';
-    }
-    if (!formData.owner.password.trim() && !initialData) {
-      newErrors['owner.password'] = 'Password is required';
-    }
-    if (!formData.subscription.startDate) {
-      newErrors['subscription.startDate'] = 'Start date is required';
-    }
-    if (!formData.subscription.endDate) {
-      newErrors['subscription.endDate'] = 'End date is required';
-    }
+    if (!formData.name.trim()) newErrors.name = 'Plan name is required';
+    if (!formData.slug.trim()) newErrors.slug = 'Slug is required (e.g. basic-plan)';
+    if (formData.price < 0) newErrors.price = 'Price cannot be negative';
+    if (formData.tables < 1) newErrors.tables = 'At least 1 table required';
+    
+    // Validate that at least one feature has text
+    const validFeatures = formData.features.filter(f => f.trim() !== "");
+    if (validFeatures.length === 0) newErrors.features = "Add at least one feature";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (validateForm()) {
-      onSubmit(formData);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    const val = type === 'number' ? Number(value) : value;
+    setFormData(prev => ({ ...prev, [name]: val }));
+    // Clear error when user types
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: "" }));
+  };
+
+  // --- Feature Handlers ---
+  const handleFeatureChange = (index: number, value: string) => {
+    const newFeatures = [...formData.features];
+    newFeatures[index] = value;
+    setFormData(prev => ({ ...prev, features: newFeatures }));
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addFeature();
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    
-    if (name.startsWith('owner.')) {
-      const ownerField = name.split('.')[1];
+  const addFeature = () => {
+    setFormData(prev => ({ ...prev, features: [...prev.features, ""] }));
+  };
+
+  const removeFeature = (index: number) => {
+    if (formData.features.length > 1) {
       setFormData(prev => ({
-        ...prev,
-        owner: {
-          ...prev.owner,
-          [ownerField]: value,
-        },
-      }));
-    } else if (name.startsWith('subscription.')) {
-      const subField = name.split('.')[1];
-      setFormData(prev => ({
-        ...prev,
-        subscription: {
-          ...prev.subscription,
-          [subField]: value,
-        },
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value,
+        ...prev, 
+        features: prev.features.filter((_, i) => i !== index)
       }));
     }
+  };
 
-    // Clear error for this field
-    if (errors[name]) {
-      setErrors(prev => {
-        const newErrors = { ...prev };
-        delete newErrors[name];
-        return newErrors;
-      });
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateForm()) {
+      console.log("hello");
+      alert("hello")
+
+      //clean data for features
+      const cleanData: Plan = {
+        ...formData,
+        features: formData.features.filter(f => f.trim() !== "")
+      };
+      
+      console.log("Plan Form Submitted Data:", cleanData);
+        onCancel();
+      
     }
   };
 
   return (
-    <Card>
-      <div className='flex w-full justify-between '>
-        <h2 className="text-xl font-semibold mb-6">
-        {initialData ? 'Edit Restaurant' : 'Add New Restaurant'}
-      </h2>
-      <h2><X  size={15} className=' rounded-md  w-10 text-black outline-1'    height={25} onClick={onCancel}/></h2>
-      </div>
-      
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-2 gap-x-5">
-          <div className="col-span-2 ">
-            <h3 className="text-md  text-gray-700 mb-1 text-center underline font-semibold">Restaurant Information</h3>
+    <div className="w-full bg-amber-500 mx-auto">
+      <Card className="p-0 overflow-hidden border-none shadow-2xl">
+        {/* Header */}
+        <div className="bg-gray-50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+          <div>
+            <h2 className="text-xl font-bold text-gray-800">
+              {initialData ? 'Edit Pricing Plan' : 'Create New Plan'}
+            </h2>
+            <p className="text-xs text-gray-500 mt-1">Configure your subscription tier details</p>
           </div>
-          
-          <Input
-            label="Restaurant Name*"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            error={errors.name}
-            placeholder="Pizza Corner"
-          />
-          
-          <Input
-            label="Slug*"
-            name="slug"
-            value={formData.slug}
-            onChange={handleChange}
-            error={errors.slug}
-            placeholder="pizza-corner"
-          />
-          
-          <Input
-            label="Number of Tables*"
-            name="tables"
-            type="number"
-            value={formData.tables}
-            onChange={handleChange}
-            error={errors.tables}
-            min="1"
-          />
-
-          <div className="col-span-2">
-            <h3 className="text-md  mt-2 text-gray-700 underline underline-offset-2 font-semibold text-center ">Owner Information</h3>
-          </div>
-          
-          <Input
-            label="Owner Name*"
-            name="owner.name"
-            value={formData.owner.name}
-            onChange={handleChange}
-            error={errors['owner.name']}
-            placeholder="John Doe"
-          />
-          
-          <Input
-            label="Owner Email*"
-            name="owner.email"
-            type="email"
-            value={formData.owner.email}
-            onChange={handleChange}
-            error={errors['owner.email']}
-            placeholder="owner@example.com"
-          />
-          
-          <Input
-            label="Password*"
-            name="owner.password"
-            type="password"
-            value={formData.owner.password}
-            onChange={handleChange}
-            error={errors['owner.password']}
-            placeholder={initialData ? '••••••••' : 'Enter password'}
-            required={!initialData}
-          />
-
-          <div className="col-span-2">
-            <h3 className="text-md font-medium text-gray-700 mb-3 mt-2  text-center underline underline-offset-2">Subscription Details</h3>
-          </div>
-          
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Plan</label>
-            <select
-              name="subscription.plan"
-              value={formData.subscription.plan}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="Basic">Basic</option>
-              <option value="Premium">Premium</option>
-              <option value="Enterprise">Enterprise</option>
-            </select>
-          </div>
-          
-          <Input
-            label="Start Date"
-            name="subscription.startDate"
-            type="date"
-            value={formData.subscription.startDate}
-            onChange={handleChange}
-            error={errors['subscription.startDate']}
-          />
-          
-          <Input
-            label="End Date"
-            name="subscription.endDate"
-            type="date"
-            value={formData.subscription.endDate}
-            onChange={handleChange}
-            error={errors['subscription.endDate']}
-          />
-        </div>
-
-        <div className="flex md:w-1/3 mx-auto lg:w-1/3 w-[90%] mt-6">
-          <PrimaryBtn
-            type="submit"
-            disabled={loading}
+          <button 
+            onClick={onCancel} 
+            className="p-2 hover:bg-gray-200 rounded-full transition-colors"
+            type="button"
           >
-            {loading ? 'Saving...' : initialData ? 'Update Restaurant' : 'Create Restaurant'}
-          </PrimaryBtn>
+            <X size={20} className="text-gray-500" />
+          </button>
         </div>
-      </form>
-    </Card>
+
+        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          {/* Row 1: Basic Info */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Input 
+              label="Plan Name*" 
+              name="name" 
+              value={formData.name} 
+              onChange={handleChange} 
+              error={errors.name} 
+              placeholder="e.g. Pro Membership"
+            />
+
+            <Input 
+              label="Slug (URL identifier)*" 
+              name="slug" 
+              value={formData.slug} 
+              onChange={handleChange} 
+              error={errors.slug} 
+              placeholder="pro-membership"
+            />
+          </div>
+
+          {/* Row 2: Type & Billing */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col">
+              <label className="text-sm font-semibold text-gray-700 mb-1.5">Plan Category</label>
+              <select 
+                name="types" 
+                value={formData.types} 
+                onChange={handleChange}
+                className="border border-gray-300 rounded-lg p-2.5 bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+              >
+                <option value="Basic">Basic</option>
+                <option value="Premium">Premium</option>
+                <option value="Gold">Gold</option>
+              </select>
+            </div>
+
+            <div className="flex flex-col">
+              <label className="text-sm font-semibold text-gray-700 mb-1.5">Billing Period</label>
+              <select 
+                name="billingPeriod" 
+                value={formData.billingPeriod} 
+                onChange={handleChange}
+                className="border border-gray-300 rounded-lg p-2.5 bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+              >
+                <option value="month">Monthly Billing</option>
+                <option value="year">Yearly Billing</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Row 3: Pricing & Limits */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Input 
+              label="Price (INR)*" 
+              name="price" 
+              type="number" 
+              value={formData.price} 
+              onChange={handleChange} 
+              error={errors.price} 
+              placeholder="0.00"
+            />
+
+            <Input 
+              label="Table Limit*" 
+              name="tables" 
+              type="number" 
+              value={formData.tables} 
+              onChange={handleChange} 
+              error={errors.tables} 
+              placeholder="10"
+            />
+          </div>
+
+          {/* Features Section */}
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <label className="text-sm font-semibold text-gray-700">Plan Features</label>
+              <span className="text-[10px] text-gray-400 flex items-center gap-1">
+                <Info size={12} /> Press Enter for new line
+              </span>
+            </div>
+            
+            <div className="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+              {formData.features.map((feature, index) => (
+                <div key={index} className="flex gap-2 group">
+                  <div className="flex-1 relative">
+                    <input
+                      className={`w-full border rounded-lg px-4 py-2 text-sm transition-all focus:ring-2 focus:ring-blue-100 outline-none ${
+                        errors.features ? 'border-red-300' : 'border-gray-200'
+                      }`}
+                      value={feature}
+                      placeholder="e.g. 24/7 Priority Support"
+                      onChange={(e) => handleFeatureChange(index, e.target.value)}
+                      onKeyDown={(e) => handleKeyDown(e, index)}
+                      autoFocus={index === formData.features.length - 1 && index !== 0}
+                    />
+                  </div>
+                  <button 
+                    type="button" 
+                    onClick={() => removeFeature(index)}
+                    className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              ))}
+            </div>
+            
+            {errors.features && <p className="text-xs text-red-500">{errors.features}</p>}
+
+         
+          </div>
+
+          {/* Submit Actions */}
+          <div className="pt-4 flex  justify-center  flex-col sm:flex-row gap-3">
+<div className='w-[80%] mx-auto md:w-1/2 '>
+  
+            <PrimaryBtn 
+              type="submit" 
+              className="flex-1 py-3 rounded-xl shadow-lg shadow-blue-100" 
+              disabled={loading}
+            >
+              {loading ? 'Saving Changes...' : initialData ? 'Update Plan Configuration' : 'Save & Publish Plan'}
+            </PrimaryBtn>
+</div>
+            
+          </div>
+        </form>
+      </Card>
+    </div>
   );
 };

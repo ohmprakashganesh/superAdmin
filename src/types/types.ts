@@ -27,10 +27,43 @@ export interface RestaurantState {
   loading: boolean;
   error: string | null;
   selectedRestaurant: Restaurant | null;
+  isFormOpen:boolean;
+  isProfileOpen:boolean;
 }
 
 export interface ApiResponse<T> {
   data: T;
   message: string;
   success: boolean;
+}
+
+export interface PaymentHistory {
+  id: string;
+  date: string;
+  amount: number;
+  status: 'paid' | 'pending' | 'failed';
+  method: string;
+}
+
+export interface initialData {
+  id: string;
+  name: string;
+  email: string;
+  logoUrl?: string;
+  isActive: boolean;
+  packageTier: 'Basic' | 'Standard' | 'Premium' | 'Enterprise';
+  nextBillingDate: string;
+  totalOrders: number;
+  staffLimit: number;
+  currentStaffCount: number;
+  paymentHistory: PaymentHistory[];
+}
+
+export interface CompanyProfileProps {
+  company: initialData;
+  onEdit: () => void;
+  onView:()=>void;
+  onClose: () => void;
+  onManageSubscription: (id: string) => void;
+  onToggleStatus: (id: string, status: boolean) => void;
 }

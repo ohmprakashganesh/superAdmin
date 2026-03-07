@@ -9,7 +9,6 @@ export const Navbar: React.FC = () => {
         <div className="flex items-center flex-1">
           <div className="relative w-100">
            <h1 className="text-2xl font-bold text-gray-900">Restaurant Management</h1>
-
           </div>
         </div>
 

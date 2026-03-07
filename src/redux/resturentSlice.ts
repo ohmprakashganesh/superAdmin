@@ -2,6 +2,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import type { Restaurant, RestaurantState } from '../types/types';
 import * as api from '../services/api';
+import { stat } from 'fs';
 
 
 const initialState: RestaurantState = {
@@ -9,6 +10,9 @@ const initialState: RestaurantState = {
   loading: false,
   error: null,
   selectedRestaurant: null,
+  isFormOpen:false,
+  isProfileOpen:false,
+
 };
 
 // Async thunks
@@ -48,6 +52,21 @@ const restaurantSlice = createSlice({
   name: 'restaurants',
   initialState,
   reducers: {
+    cancelModal:(state)=>{
+      state.isFormOpen=false;
+      state.isProfileOpen=false;
+      state.selectedRestaurant=null;
+    },
+    openEditForm:(state,action:PayloadAction<Restaurant>)=>{
+      state.selectedRestaurant=action.payload;
+      state.isFormOpen=true;
+      state.isProfileOpen=false;
+    },
+    openProfile:(state,action:PayloadAction<Restaurant>)=>{
+      state.selectedRestaurant=action.payload;
+      state.isFormOpen=false;
+      state.isProfileOpen=true;
+    },
     setSelectedRestaurant: (state, action: PayloadAction<Restaurant | null>) => {
       state.selectedRestaurant = action.payload;
     },
@@ -56,6 +75,7 @@ const restaurantSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    
     builder
       // Fetch restaurants
       .addCase(fetchRestaurants.pending, (state) => {
@@ -88,5 +108,5 @@ const restaurantSlice = createSlice({
   },
 });
 
-export const { setSelectedRestaurant, clearError } = restaurantSlice.actions;
+export const { setSelectedRestaurant,clearError,cancelModal,openEditForm,openProfile } = restaurantSlice.actions;
 export default restaurantSlice.reducer;

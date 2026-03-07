@@ -9,6 +9,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export const Input: React.FC<InputProps> = ({
   label,
   error,
+  onChange,
   className = '',
   id,
   ...props
@@ -26,6 +27,7 @@ export const Input: React.FC<InputProps> = ({
         </label>
       )}
       <input
+      onChange={onChange}
         id={inputId}
         className={`
           w-full px-3 py-2 border rounded-lg shadow-sm

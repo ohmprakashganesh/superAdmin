@@ -1,21 +1,23 @@
 // components/restaurants/RestaurantList.tsx
 import React from 'react';
 import type { Restaurant } from '../../types/types';
-import RestaurantTable, { RestaurantCard } from './RestaurantTable';
+import RestaurantTable from './RestaurantTable';
 
 
 interface RestaurantListProps {
   restaurants: Restaurant[];
   onEdit: (restaurant: Restaurant) => void;
-  onDelete: (id: string) => void;
+  onView:(restaurant:Restaurant)=>void;
   loading?: boolean;
+  searchTerm:string;
 }
 
 
 export const RestaurantList: React.FC<RestaurantListProps> = ({
   restaurants,
+  searchTerm,
   onEdit,
-  onDelete,
+  onView,
   loading = false,
 }) => {
   if (loading) {
@@ -47,9 +49,11 @@ export const RestaurantList: React.FC<RestaurantListProps> = ({
     <div className="w-full gap-6">
       {
         <RestaurantTable
+         searchTerm={searchTerm}
           restaurants={restaurants}
           onEdit={onEdit}
-          onDelete={onDelete}
+          onView={onView}
+          
         />
       }
     </div>
