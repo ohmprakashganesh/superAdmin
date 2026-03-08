@@ -1,7 +1,21 @@
 import React from 'react'
 import { mockCompanies } from './data';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 const PlanDistribution = () => {
+
+  interface ChartData {
+  name: string;
+  value: number;
+}
+
+const data: ChartData[] = [
+  { name: 'Category A', value: 50 },
+  { name: 'Category B', value: 30 },
+  { name: 'Category C', value: 20 },
+];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
+
      const planBreakdown: PlanBreakdown[] = [
     { 
       plan: 'Basic', 
@@ -37,7 +51,7 @@ const PlanDistribution = () => {
                       <span className="font-medium text-gray-700">{plan.plan}</span>
                       <span className="text-gray-600">{plan.subscriberCount} subscribers</span>
                     </div>
-                    <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
+                    <div className="w-full bg-gray-200 h-6 rounded-full overflow-hidden">
                       <div 
                         className={`${plan.color} h-full`}
                         style={{ width: `${plan.percentage}%` }}
@@ -45,23 +59,35 @@ const PlanDistribution = () => {
                     </div>
                     <div className="flex justify-between text-xs mt-1">
                       <span className="text-gray-500">{plan.percentage}% of total</span>
-                      <span className="font-bold text-gray-700">${plan.revenue}/mo</span>
                     </div>
                   </div>
                 ))}
               </div>
 
               {/* Plan Revenue Summary */}
-              <div className="mt-6 pt-6 border-t">
-                <h4 className="text-sm font-semibold text-gray-600 mb-3">Revenue by Plan</h4>
-                <div className="space-y-2">
-                  {planBreakdown.map((plan) => (
-                    <div key={plan.plan} className="flex justify-between text-sm">
-                      <span className="text-gray-600">{plan.plan}</span>
-                      <span className="font-medium text-gray-800">${plan.revenue}/mo</span>
-                    </div>
-                  ))}
-                </div>
+              <div className="mt-2 pt-2  border-t">
+                
+                <div style={{ width: '100%', height: 200 }}>
+      <ResponsiveContainer>
+        <PieChart>
+          <Pie
+            data={data}
+            cx="50%" // Center X
+            cy="50%" // Center Y
+            innerRadius={60} // Set this to 0 for a full pie, or >0 for a donut
+            outerRadius={80}
+            paddingAngle={5}
+            dataKey="value"
+          >
+            {data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend verticalAlign="bottom" height={36}/>
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
               </div>
             </div>
   )

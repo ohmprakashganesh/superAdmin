@@ -110,25 +110,18 @@ const Dashboard: React.FC<SuperAdminOverviewProps> = ({
       ),
     },
     {
-      title: "Monthly Revenue",
-      value: `$${stats.monthlyRevenue.toLocaleString()}`,
+      title: "Total plans",
+      value: `3`,
       icon: DollarSign,
       iconBg: "bg-purple-100",
       extraInfo: <p className="text-xs text-gray-400">MRR: ${stats.monthlyRevenue.toLocaleString()}</p>,
-    },
-    {
-      title: "Yearly Revenue (Projected)",
-      value: `$${stats.yearlyRevenue.toLocaleString()}`,
-      icon: UploadCloud,
-      iconBg: "bg-indigo-100",
-      extraInfo: <p className="text-xs text-gray-400">ARR: ${stats.yearlyRevenue.toLocaleString()}</p>,
-    },
+    }
   ];
   return (
       <div className='bg-white w-full max-w-7xl h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col'>
         {/* Timeframe Selector */}
         <div className="px-6 py-4 bg-gray-50 border-b flex items-center justify-between">
-          <div className="flex items-center gap-4">
+          {/* <div className="flex items-center gap-4">
             <div className="flex bg-white rounded-lg p-1 shadow-sm">
               <button
                 onClick={() => setTimeframe('monthly')}
@@ -162,7 +155,7 @@ const Dashboard: React.FC<SuperAdminOverviewProps> = ({
               <option value="Premium">Premium</option>
               <option value="Enterprise">Enterprise</option>
             </select>
-          </div>
+          </div> */}
           
           <div className="text-sm text-gray-500">
             Last updated: {new Date().toLocaleString()}
@@ -172,7 +165,7 @@ const Dashboard: React.FC<SuperAdminOverviewProps> = ({
         {/* Main Content */}
         <div className="flex-1 overflow-y-auto p-6">
           {/* Key Metrics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
 
             {statItems.map((item, index) => (
             <MainCard key={index} {...item} />
@@ -180,27 +173,13 @@ const Dashboard: React.FC<SuperAdminOverviewProps> = ({
 
           </div>
 
-
-
-
           {/* Charts and Analytics Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             <PlanDistribution />
-
-            {/* Revenue Trend */}
-            <RevenueTrend />
+            <RecentSubs />
           </div>
 
 
-
-          {/* Recent Subscribers & Quick Actions */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Recent Subscribers */}
-             <RecentSubs />
-
-            {/* Quick Stats & Actions */}
-              <QuickAction />
-          </div>
         </div>
 
       </div>

@@ -1,5 +1,5 @@
-import React from 'react'
 import { mockCompanies } from './data';
+import { Link } from 'react-router-dom';
 
 const RecentSubs = () => {
 
@@ -11,9 +11,12 @@ const RecentSubs = () => {
     <div className="lg:col-span-2 bg-white rounded-xl border p-6">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-bold text-gray-800">Recent Subscribers</h3>
+                <Link to="/restaurants">
+              
                 <button className="text-sm text-indigo-600 hover:text-indigo-800 font-medium">
                   View All →
                 </button>
+                  </Link>
               </div>
               
               <div className="space-y-3">
@@ -45,8 +48,7 @@ const RecentSubs = () => {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-gray-800">${company.monthlyRevenue}/mo</p>
-                      <p className="text-xs text-gray-400">Joined {company.joinedDate}</p>
+                    <p className="text-xs text-gray-400">Joined {company.joinedDate}</p>
                     </div>
                   </div>
                 ))}

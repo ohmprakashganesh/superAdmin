@@ -10,7 +10,8 @@ export const Input: React.FC<InputProps> = ({
   label,
   error,
   onChange,
-  className = '',
+  value,
+  className ='',
   id,
   ...props
 }) => {
@@ -28,6 +29,7 @@ export const Input: React.FC<InputProps> = ({
       )}
       <input
       onChange={onChange}
+      value={value}
         id={inputId}
         className={`
           w-full px-3 py-2 border rounded-lg shadow-sm

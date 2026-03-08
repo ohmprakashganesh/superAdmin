@@ -12,7 +12,6 @@ const Restaurants: React.FC = () => {
   const {
     restaurants,
     loading,
-    error,
     selectedRestaurant,
     isProfileOpen,
     showProfile,
@@ -26,7 +25,7 @@ const Restaurants: React.FC = () => {
   } = useRestaurants();
 
   console.log(restaurants);
-  const [showForm, setShowForm] = useState(false);
+  // const [showForm, setShowForm] = useState(false);
   const[searchTerm,setSearchTerm]=useState("");
 
   const handleCreateRestaurant = async (data: Restaurant) => {
@@ -49,12 +48,14 @@ const Restaurants: React.FC = () => {
     }
   };
 
+
+
   const handleUpdateRestaurant = async (data: Restaurant) => {
     if (selectedRestaurant?._id) {
       try {
         await editRestaurant(selectedRestaurant._id, data);
-        setShowForm(false);
         selectRestaurant(null);
+         closeModal();
       } catch (error) {
         console.error('Failed to update restaurant:', error);
       }
@@ -62,10 +63,9 @@ const Restaurants: React.FC = () => {
   };
 
   const handleEdit = (restaurant: Restaurant) => {
-    // selectRestaurant(restaurant);
     showEditForm(restaurant);
   };
-
+  
    const handleView = (restaurant:Restaurant)=>{
     showProfile(restaurant);
    }

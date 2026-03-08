@@ -392,7 +392,6 @@ const Report: React.FC<SuperAdminOverviewProps> = ({
             </div>
           </div>
         </div>
-
         {/* Footer with Summary */}
         <div className="p-4 border-t bg-gray-50">
           <div className="flex justify-between items-center text-sm">
