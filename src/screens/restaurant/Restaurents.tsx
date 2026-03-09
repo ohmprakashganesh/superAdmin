@@ -26,6 +26,7 @@ const Restaurants: React.FC = () => {
 
   console.log(restaurants);
   // const [showForm, setShowForm] = useState(false);
+
   const[searchTerm,setSearchTerm]=useState("");
 
   const handleCreateRestaurant = async (data: Restaurant) => {
@@ -117,6 +118,7 @@ const Restaurants: React.FC = () => {
                    company={selectedRestaurant}
                     loading={loading}
                     onClose={closeModal}
+
             />
             </div>
              </div>

@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
-import type { CompanyProfileProps } from '../../types/types';
-import Header from './Header';
-import Input from '../../components/ui/Input';
-import BusinessCard from './BusinessCard';
-import OwnerCard from './OwnerCard';
-import SubscriptionCard from './SubscriptionCard';
-
-
-
+import React, { useState } from "react";
+import type { CompanyProfileProps } from "../../types/types";
+import Header from "./Header";
+import Input from "../../components/ui/Input";
+import BusinessCard from "./BusinessCard";
+import OwnerCard from "./OwnerCard";
+import SubscriptionCard from "./SubscriptionCard";
 
 const CompanyProfile: React.FC<CompanyProfileProps> = ({
   company,
   onEdit,
   onClose,
   onManageSubscription,
-  onToggleStatus
+  onToggleStatus,
 }) => {
+  const [formData, setFormData] = useState({});
+  console.log(formData);
   const [isEditing, setIsEditing] = useState(false);
-  const [editedCompany, setEditedCompany] = useState(company);
 
+  const [editedCompany, setEditedCompany] = useState(company);
+  console.log(editedCompany);
   // 🔹 Company data with all fields from image
   const data = {
     // Business Identity
@@ -55,38 +55,64 @@ const CompanyProfile: React.FC<CompanyProfileProps> = ({
   };
 
   const handleInputChange = (field: string, value: string | number) => {
-    setEditedCompany(prev => ({
+    setEditedCompany((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
+    }));
+  };
+  const handleFormChange = (field: string, value: string | number) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
     }));
   };
 
   return (
-    <div className='fixed inset-0 bg-black/60 backdrop-blur-sm w-screen h-screen flex items-center justify-center z-50 p-4'>
-      <div className='bg-white w-full max-w-6xl h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col'>
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm w-screen h-screen flex items-center justify-center z-50 p-4">
+      <div className="bg-white w-full max-w-6xl h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
         {/* Header */}
-        <Header isEditing={isEditing} setIsEditing={setIsEditing} data={data} onEdit={handleEdit} onClose={onClose} />
+        <Header
+          isEditing={isEditing}
+          setIsEditing={setIsEditing}
+          data={data}
+          onEdit={handleEdit}
+          onClose={onClose}
+        />
 
         {/* Body */}
         <div className="flex-1 overflow-y-auto p-8 grid grid-cols-1  gap-8">
-
           {/* Main Content */}
           <div className=" space-y-8">
-
             {/* Business Identity & Owner Credentials */}
             <div className="grid grid-cols-2 gap-6">
               {/* Business Identity Card */}
-              <BusinessCard isEditing={isEditing} handleInputChange={handleInputChange} editedCompany={editedCompany} data={data} />
-              <OwnerCard isEditing={isEditing} handleInputChange={handleInputChange} editedCompany={editedCompany} data={data} />
+              <BusinessCard
+                isEditing={isEditing}
+                handleInputChange={handleInputChange}
+                editedCompany={editedCompany}
+                data={data}
+              />
+              <OwnerCard
+                isEditing={isEditing}
+                handleInputChange={handleInputChange}
+                editedCompany={editedCompany}
+                data={data}
+              />
             </div>
             {/* Subscription Plan */}
-            <SubscriptionCard isEditing={isEditing}  handleInputChange={handleInputChange} editedCompany={editedCompany} data={data} />
+            <SubscriptionCard
+              isEditing={isEditing}
+              handleInputChange={handleInputChange}
+              editedCompany={editedCompany}
+              data={data}
+              formData={formData}
+              handleFormChange={handleFormChange}
+            />
           </div>
         </div>
       </div>
     </div>
   );
 };
-
 
 export default CompanyProfile;
