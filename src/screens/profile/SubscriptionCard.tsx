@@ -1,22 +1,11 @@
 import React from "react";
-import Input from "../../components/ui/Input";
 
 interface subscriptionProps {
-  isEditing: boolean;
-  editedCompany: any;
-  formData: any;
-  handleInputChange: (field: string, value: string) => void; // Fixed type    data: any;
-  handleFormChange: (field: string, value: string) => void; // Fixed type    data: any;
   data: any;
 }
 
 const SubscriptionCard: React.FC<subscriptionProps> = ({
-  isEditing,
-  editedCompany,
-  handleInputChange,
   data,
-  formData,
-  handleFormChange,
 }) => (
   <div className="p-5 rounded-xl border bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm">
     <h3 className="text-sm font-bold text-gray-700 uppercase mb-4 flex items-center gap-2">
@@ -38,19 +27,9 @@ const SubscriptionCard: React.FC<subscriptionProps> = ({
     <div className="grid grid-cols-3 gap-4">
       <div>
         <p className="text-xs text-gray-500">Select Tier</p>
-        {isEditing ? (
-          <select
-            value={editedCompany?.packageTier || data.packageTier}
-            onChange={(e) => handleInputChange("packageTier", e.target.value)}
-            className="w-full p-2 border rounded-lg mt-1 font-bold"
-          >
-            <option>Basic</option>
-            <option>Premium</option>
-            <option>Enterprise</option>
-          </select>
-        ) : (
+     
           <p className="font-bold text-indigo-600">{data.packageTier}</p>
-        )}
+
       </div>
       <div>
         <p className="text-xs text-gray-500">Activation Date</p>
@@ -58,14 +37,9 @@ const SubscriptionCard: React.FC<subscriptionProps> = ({
       </div>
       <div>
         <p className="text-xs text-gray-500">Expiry Date</p>
-        {isEditing ? (
-          <Input
-            onChange={(e) => handleFormChange("expiryDate", e.target.value)}
-            value={editedCompany?.expiryDate }
-          />
-        ) : (
+
           <p className="font-medium text-gray-800">{data.expiryDate}</p>
-        )}
+
       </div>
     </div>
   </div>

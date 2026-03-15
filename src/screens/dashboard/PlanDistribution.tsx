@@ -1,46 +1,42 @@
 import React from 'react'
 import { mockCompanies } from './data';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import type { Plan } from '../plans/planType';
 
-const PlanDistribution = () => {
+const PlanDistribution:React.FC<Plan> = ({plans}) => {
+  console.log(plans);
 
   interface ChartData {
   name: string;
   value: number;
 }
-
+    
 const data: ChartData[] = [
-  { name: 'Category A', value: 50 },
-  { name: 'Category B', value: 30 },
-  { name: 'Category C', value: 20 },
+  { name: 'Category A', value: plans[0]?.subscribers },
+  { name: 'Category B', value: plans[1]?.subscribers },
+  { name: 'Category C', value: plans[2]?.subscribers },
 ];
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
-
-     const planBreakdown: PlanBreakdown[] = [
+     const planBreakdown = [
     { 
       plan: 'Basic', 
-      subscriberCount: mockCompanies.filter(c => c.packageTier === 'Basic' && c.isActive).length,
-      revenue: mockCompanies.filter(c => c.packageTier === 'Basic' && c.isActive).reduce((sum, c) => sum + c.monthlyRevenue, 0),
+      subscriberCount:plans[0]?.subscribers,
       percentage: 45,
       color: 'bg-blue-500'
     },
     { 
       plan: 'Premium', 
-      subscriberCount: mockCompanies.filter(c => c.packageTier === 'Premium' && c.isActive).length,
-      revenue: mockCompanies.filter(c => c.packageTier === 'Premium' && c.isActive).reduce((sum, c) => sum + c.monthlyRevenue, 0),
-      percentage: 35,
+    subscriberCount:plans[1]?.subscribers,
+    percentage: 35,
       color: 'bg-purple-500'
     },
     { 
       plan: 'Enterprise', 
-      subscriberCount: mockCompanies.filter(c => c.packageTier === 'Enterprise' && c.isActive).length,
-      revenue: mockCompanies.filter(c => c.packageTier === 'Enterprise' && c.isActive).reduce((sum, c) => sum + c.monthlyRevenue, 0),
-      percentage: 20,
+     subscriberCount:plans[2]?.subscribers,
+    percentage: 20,
       color: 'bg-indigo-500'
     },
   ];
-
-
   return (
      <div className="lg:col-span-1 bg-white rounded-xl border p-6">
               <h3 className="text-lg font-bold text-gray-800 mb-4">Plan Distribution</h3>

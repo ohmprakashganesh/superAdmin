@@ -32,7 +32,6 @@ const Restaurants: React.FC = () => {
   const handleCreateRestaurant = async (data: Restaurant) => {
     try {
       await addRestaurant(data);
-      setShowForm(false);
       selectRestaurant(null);
     } catch (error) {
       console.error('Failed to create restaurant:', error);
@@ -48,8 +47,6 @@ const Restaurants: React.FC = () => {
       }
     }
   };
-
-
 
   const handleUpdateRestaurant = async (data: Restaurant) => {
     if (selectedRestaurant?._id) {
@@ -88,7 +85,7 @@ const Restaurants: React.FC = () => {
         )}</div>
       </div>
 
-     <RestaurantList
+                 <RestaurantList
                    restaurants={restaurants}
                    onEdit={handleEdit}
                    onView={handleView}
@@ -104,7 +101,6 @@ const Restaurants: React.FC = () => {
               onSubmit={selectedRestaurant ? handleUpdateRestaurant : handleCreateRestaurant}
               onClose={closeModal}
               loading={loading}
-              
             />
           </div>
         </div>

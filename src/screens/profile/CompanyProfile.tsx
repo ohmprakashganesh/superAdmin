@@ -1,29 +1,25 @@
 import React, { useState } from "react";
 import type { CompanyProfileProps } from "../../types/types";
 import Header from "./Header";
-import Input from "../../components/ui/Input";
 import BusinessCard from "./BusinessCard";
 import OwnerCard from "./OwnerCard";
 import SubscriptionCard from "./SubscriptionCard";
 
 const CompanyProfile: React.FC<CompanyProfileProps> = ({
   company,
-  onEdit,
   onClose,
-  onManageSubscription,
-  onToggleStatus,
 }) => {
   const [formData, setFormData] = useState({});
   console.log(formData);
   const [isEditing, setIsEditing] = useState(false);
 
   const [editedCompany, setEditedCompany] = useState(company);
-  console.log(editedCompany);
+  console.log("this si edited company",editedCompany);
   // 🔹 Company data with all fields from image
   const data = {
     // Business Identity
     id: company?.id || "demo-id",
-    name: company?.name || "momo House",
+    name: company?.name || "momo House ",
     slug: company?.slug || "momo-house",
     totalCapacity: company?.totalCapacity || 20,
 
@@ -72,10 +68,7 @@ const CompanyProfile: React.FC<CompanyProfileProps> = ({
       <div className="bg-white w-full max-w-6xl h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
         {/* Header */}
         <Header
-          isEditing={isEditing}
-          setIsEditing={setIsEditing}
           data={data}
-          onEdit={handleEdit}
           onClose={onClose}
         />
 
@@ -86,27 +79,22 @@ const CompanyProfile: React.FC<CompanyProfileProps> = ({
             {/* Business Identity & Owner Credentials */}
             <div className="grid grid-cols-2 gap-6">
               {/* Business Identity Card */}
+              
               <BusinessCard
-                isEditing={isEditing}
-                handleInputChange={handleInputChange}
                 editedCompany={editedCompany}
                 data={data}
               />
+
               <OwnerCard
-                isEditing={isEditing}
-                handleInputChange={handleInputChange}
                 editedCompany={editedCompany}
                 data={data}
               />
             </div>
             {/* Subscription Plan */}
             <SubscriptionCard
-              isEditing={isEditing}
-              handleInputChange={handleInputChange}
               editedCompany={editedCompany}
               data={data}
               formData={formData}
-              handleFormChange={handleFormChange}
             />
           </div>
         </div>

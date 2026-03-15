@@ -11,7 +11,6 @@ interface RestaurantFormProps {
   onClose: () => void;
   loading?: boolean;
 }
-
 const initialFormState: Restaurant = {
   name: "",
   slug: "",
@@ -71,7 +70,7 @@ export const RestaurantForm: React.FC<RestaurantFormProps> = ({
     e.preventDefault();
     if (validateForm()) {
       onSubmit(formData);
-      console.log(formData);
+      console.log("this is form resturent form",formData);
       onClose();
     }
   };
@@ -94,6 +93,8 @@ export const RestaurantForm: React.FC<RestaurantFormProps> = ({
       }
       return { ...prev, [name]: value };
     });
+
+    console.log("this is form data",formData)
 
     // Clear error dynamically
     if (errors[name]) {

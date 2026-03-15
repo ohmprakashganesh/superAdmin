@@ -9,12 +9,5 @@
     { id: '8', name: 'Curry Palace', packageTier: 'Premium', isActive: true, monthlyRevenue: 199, joinedDate: '2026-01-25' },
   ];
 
-  // Mock revenue data over time
- export const mockRevenueData: RevenueData[] = [
-    { month: 'Jan 2026', revenue: 8900, subscribers: 18 },
-    { month: 'Feb 2026', revenue: 12400, subscribers: 24 },
-    { month: 'Mar 2026', revenue: 15600, subscribers: 32 },
-    { month: 'Apr 2026', revenue: 18300, subscribers: 38 },
-    { month: 'May 2026', revenue: 21100, subscribers: 45 },
-    { month: 'Jun 2026', revenue: 24500, subscribers: 52 },
-  ];
+   
+

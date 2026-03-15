@@ -1,3 +1,6 @@
+import type { Interface } from "readline";
+import type { Plan } from "../screens/plans/planType";
+
 // types/index.ts
 export interface Owner {
   name: string;
@@ -7,6 +10,7 @@ export interface Owner {
 
 export interface Subscription {
   plan: 'Basic' | 'Premium' | 'Enterprise';
+  status:"Active"|"Inactive"
   startDate: string;
   endDate: string;
 }
@@ -22,11 +26,16 @@ export interface Restaurant {
   updatedAt?: string;
 }
 
+
+
 export interface RestaurantState {
   restaurants: Restaurant[];
+  plans:Plan[];
+  summery:[]|null;
   loading: boolean;
   error: string | null;
   selectedRestaurant: Restaurant | null;
+  selectedPlan:Plan |null;
   isFormOpen:boolean;
   isProfileOpen:boolean;
 }
@@ -36,6 +45,10 @@ export interface ApiResponse<T> {
   message: string;
   success: boolean;
 }
+
+export interface summeryData {
+    totalSubscriber:number, totalPlans:number; activeSubscriber:number
+};
 
 export interface PaymentHistory {
   id: string;
@@ -66,4 +79,8 @@ export interface CompanyProfileProps {
   onClose: () => void;
   onManageSubscription: (id: string) => void;
   onToggleStatus: (id: string, status: boolean) => void;
+}
+
+ export interface SummeryData{
+  totalSubscriber:number; totalPlans:number; activeSubscriber:number
 }

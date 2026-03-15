@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
 import type { CompanyProfileProps } from '../../types/types';
 import MainCard from './MainCard';
 import { mockCompanies } from './data';
-import { mockRevenueData } from './data';
-import { DollarSign, UploadCloud, User, Users2Icon } from 'lucide-react';
+import { Users2Icon } from 'lucide-react';
 import PlanDistribution from './PlanDistribution';
-import RevenueTrend from './RevenueTrend';
 import RecentSubs from './RecentSubs';
-import QuickAction from './QuickAction';
+import { usePlan } from '../../hooks/usePlan';
+
 interface SuperAdminOverviewProps {
   companies?: CompanyProfileProps['company'][];
   onClose: () => void;
@@ -40,83 +38,39 @@ export interface RevenueData {
 }
 
 const Dashboard: React.FC<SuperAdminOverviewProps> = ({ 
-  companies = [], 
-  onViewCompany 
 }) => {
-  const [timeframe, setTimeframe] = useState<'monthly' | 'yearly'>('monthly');
-  const [selectedPlan, setSelectedPlan] = useState<string>('all');
 
+  const {
+      summery,
+      plans
+    } = usePlan();
 
+    console.log(summery);
   // Calculate subscription statistics
-  const calculateStats = (): SubscriptionStats => {
-    const companies = mockCompanies;
-    const activeSubscribers = companies.filter(c => c.isActive).length;
-    const suspendedSubscribers = companies.filter(c => !c.isActive).length;
+  // const calculateStats = (): SubscriptionStats => {
+  //   const companies = mockCompanies;
+  //   const activeSubscribers = companies.filter(c => c.isActive).length;
+  //   const suspendedSubscribers = companies.filter(c => !c.isActive).length;
     
-    // Calculate revenues
-    const monthlyRevenue = companies
-      .filter(c => c.isActive)
-      .reduce((sum, c) => sum + c.monthlyRevenue, 0);
+  //   // Calculate revenues
+  //   const monthlyRevenue = companies
+  //     .filter(c => c.isActive)
+  //     .reduce((sum, c) => sum + c.monthlyRevenue, 0);
     
-    const yearlyRevenue = monthlyRevenue * 12;
+  //   const yearlyRevenue = monthlyRevenue * 12;
     
-    return {
-      totalSubscribers: companies.length,
-      activeSubscribers,
-      suspendedSubscribers,
-      totalRevenue: monthlyRevenue * 12, // Annual revenue
-      monthlyRevenue,
-      yearlyRevenue,
-      revenueGrowth: 23.5, // Mock growth percentage
-    };
-  };
-
-  // Plan breakdown
-
-
+  //   return {
+  //     totalSubscribers: companies.length,
+  //     activeSubscribers,
+  //     suspendedSubscribers,
+  //     totalRevenue: monthlyRevenue * 12, // Annual revenue
+  //     monthlyRevenue,
+  //     yearlyRevenue,
+  //     revenueGrowth: 23.5, // Mock growth percentage
+  //   };
+  // };
   
-
-  const stats = calculateStats();
-
-  // Recent subscribers
-  const recentSubscribers = [...mockCompanies]
-    .sort((a, b) => new Date(b.joinedDate).getTime() - new Date(a.joinedDate).getTime())
-    .slice(0, 5);
-
-
-    const statItems = [
-    {
-      title: "Total Subscribers",
-      value: stats.totalSubscribers,
-      icon: Users2Icon,
-      iconBg: "bg-blue-100",
-      trend: stats.revenueGrowth,
-      extraInfo: (
-        <div className="flex gap-4 mt-1 text-xs">
-          <span className="text-green-600">● {stats.activeSubscribers} Active</span>
-          <span className="text-red-600">● {stats.suspendedSubscribers} Suspended</span>
-        </div>
-      ),
-    },
-    {
-      title: "Active Subscribers",
-      value: stats.activeSubscribers,
-      icon: User,
-      iconBg: "bg-green-100",
-      extraInfo: (
-        <p className="text-xs text-gray-400">
-          {((stats.activeSubscribers / stats.totalSubscribers) * 100).toFixed(1)}% of total
-        </p>
-      ),
-    },
-    {
-      title: "Total plans",
-      value: `3`,
-      icon: DollarSign,
-      iconBg: "bg-purple-100",
-      extraInfo: <p className="text-xs text-gray-400">MRR: ${stats.monthlyRevenue.toLocaleString()}</p>,
-    }
-  ];
+  // const stats = calculateStats();
   return (
       <div className='bg-white w-full max-w-7xl h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col'>
         {/* Timeframe Selector */}
@@ -167,15 +121,15 @@ const Dashboard: React.FC<SuperAdminOverviewProps> = ({
           {/* Key Metrics Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
 
-            {statItems.map((item, index) => (
-            <MainCard key={index} {...item} />
-           ))}
+           {summery?.map((item, ind) => (
+         <MainCard key={ind} {...item} />
+            ))}
 
           </div>
 
           {/* Charts and Analytics Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-            <PlanDistribution />
+            <PlanDistribution plans={plans} />
             <RecentSubs />
           </div>
 

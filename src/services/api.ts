@@ -1,9 +1,12 @@
 // services/api.ts
 
 import axios from 'axios';
-import type { ApiResponse, Restaurant } from '../types/types';
+import type { ApiResponse, plan, Restaurant, summeryData } from '../types/types';
  
- import { mockRestaurants } from '../mock/mockData';
+ import {mockSummery,mockRestaurants} from '../mock/mockData';
+import type { Plan } from '../screens/plans/planType';
+import {respPlanData} from "../screens/plans/mock";
+
 
 const API_BASE_URL = 'https://byte-backend-r4tn.onrender.com/api';
 
@@ -14,7 +17,6 @@ const API_BASE_URL = 'https://byte-backend-r4tn.onrender.com/api';
   },
 });
 
- const mockData=mockRestaurants;
 // Request interceptor for auth token
 api.interceptors.request.use(
   (config) => {
@@ -36,10 +38,13 @@ api.interceptors.response.use(
   }
 );
 
+
 export const getRestaurants = async (): Promise<ApiResponse<Restaurant[]>> => {
-  const response = await api.get('/super-admin/restaurants');
-  return response.data;
+  // const response = await api.get('/super-admin/restaurants');
+  // return response.data;
+  return ({data:mockRestaurants , message:"success",success:true})
 };
+
 
 export const getRestaurantById = async (id: string): Promise<ApiResponse<Restaurant>> => {
   const response = await api.get(`/super-admin/restaurants/${id}`);
@@ -60,3 +65,38 @@ export const deleteRestaurant = async (id: string): Promise<ApiResponse<void>> =
   const response = await api.delete(`/super-admin/restaurants/${id}`);
   return response.data;
 };
+
+// summery 
+export const summery= async():Promise<ApiResponse<summeryData>>=>{
+    // const response=await api.get(`/super-admin/summery`);
+  // return response.data;
+  return mockSummery;
+}
+
+
+//crud of plans
+export const createPlan= async(plan:plan):Promise<ApiResponse<plan>>=>{
+  // const response=await api.post(`/super-admin/plans`,plan);
+  // return response.data;
+  return plan;
+}
+
+export const updatePlan= async(id:string|number,plan:plan):Promise<ApiResponse<Plan>>=>{
+  // const response=await api.post(`/super-admin/plans/${id}`,plan);
+  // return response.data;
+    return plan;
+}
+
+export const allPlans= async():Promise<ApiResponse<Plan[]>>=>{
+  // const response=await api.get(`/super-admin/plans`);
+  // return response.data;
+  return respPlanData;
+}
+
+export const deletePlan=async(id:string|number)=>{
+  // const response = await api.delete(`/super-admin/${id}`);
+  // return response.data;
+    return respPlanData;
+
+}
+

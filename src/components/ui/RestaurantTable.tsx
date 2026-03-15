@@ -94,7 +94,7 @@ useEffect(() => {
                   <div className="flex flex-col text-xs text-gray-600 gap-1">
                     <div className="flex items-center gap-1">
                       <CalendarIcon className="h-3 w-3 text-emerald-500" />
-                      <span>{restaurant.subscription.startDate.slice(0,-15)}</span>-<span>{restaurant.subscription.endDate.slice(0,-15)}</span>
+                      <span>{restaurant.subscription.startDate}</span>-<span>{restaurant.subscription.endDate}</span>
 
                     </div>                 
                   </div>

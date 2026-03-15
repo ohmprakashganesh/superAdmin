@@ -44,7 +44,7 @@ export const RestaurantList: React.FC<RestaurantListProps> = ({
       </div>
     );
   }
-
+ console.log(restaurants);
   return (
     <div className="w-full gap-6">
       {
