@@ -2,6 +2,7 @@
 import React from 'react';
 import type { Restaurant } from '../../types/types';
 import RestaurantTable from './RestaurantTable';
+import Pagination from './Pagination';
 
 
 interface RestaurantListProps {
@@ -32,6 +33,7 @@ export const RestaurantList: React.FC<RestaurantListProps> = ({
             </div>
           </div>
         ))}
+
       </div>
     );
   }

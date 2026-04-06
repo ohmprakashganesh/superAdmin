@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import RestaurantList from '../../components/ui/ResturentList'
 import { useRestaurants } from '../../hooks/useResturents';
 import type { Restaurant } from '../../types/types';
@@ -7,6 +7,7 @@ import { PlusIcon } from 'lucide-react';
 import Input from '../../components/ui/Input';
 import { RestaurantForm } from '../../components/formUi/ResturentForm';
 import CompanyProfile from '../profile/CompanyProfile';
+import Pagination from '../../components/ui/Pagination';
 
 const Restaurants: React.FC = () => {
   const {
@@ -24,8 +25,8 @@ const Restaurants: React.FC = () => {
     selectRestaurant,
   } = useRestaurants();
 
-  console.log(restaurants);
-  // const [showForm, setShowForm] = useState(false);
+
+ 
 
   const[searchTerm,setSearchTerm]=useState("");
 
@@ -69,22 +70,20 @@ const Restaurants: React.FC = () => {
    }
   return (
     <div>
-      <div className=' w-full flex  justify-between my-5 items-center'>
+      <div className=' w-full flex my-2 md:px-10  justify-between mx-auto  items-center'>
         <div>
           <Input onChange={(e)=>setSearchTerm(e.target.value)} placeholder='search by name' />
           </div>
         <div> {!isFormOpen && (
-          <div className='w-50 '>
+          <div className=' '>
             <PrimaryBtn
               onClick={() => showEditForm(null)}
             >
               <PlusIcon className=" w-5 h-5 mr-2" />
-              Add Restaurant
             </PrimaryBtn>
           </div>
         )}</div>
       </div>
-
                  <RestaurantList
                    restaurants={restaurants}
                    onEdit={handleEdit}
@@ -120,8 +119,6 @@ const Restaurants: React.FC = () => {
              </div>
           )
         }
-
-
     </div>
   )
 }

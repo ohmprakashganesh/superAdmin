@@ -11,7 +11,6 @@ const Plans: React.FC = () => {
     selectPlan,
     selectedPlan,
     plans,
-    summery,
     removePlan,
     addPlan,
     editPlan,

@@ -174,8 +174,6 @@ export const mockRestaurants: Restaurant[] = [
   },
 ];
 
-
-
 export const mockSummery = {
   message: "successfull",
   success: true,

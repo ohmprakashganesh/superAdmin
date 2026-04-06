@@ -1,15 +1,13 @@
 import type { CompanyProfileProps } from '../../types/types';
 import MainCard from './MainCard';
-import { mockCompanies } from './data';
-import { Users2Icon } from 'lucide-react';
 import PlanDistribution from './PlanDistribution';
 import RecentSubs from './RecentSubs';
 import { usePlan } from '../../hooks/usePlan';
 
 interface SuperAdminOverviewProps {
   companies?: CompanyProfileProps['company'][];
-  onClose: () => void;
-  onViewCompany: (companyId: string) => void;
+  onClose?: () => void;
+  onViewCompany?: (companyId: string) => void;
 }
 
 export interface SubscriptionStats {
@@ -29,7 +27,6 @@ export interface PlanBreakdown {
   percentage: number;
   color: string;
 }
-
 
 export interface RevenueData {
   month: string;
@@ -124,18 +121,13 @@ const Dashboard: React.FC<SuperAdminOverviewProps> = ({
            {summery?.map((item, ind) => (
          <MainCard key={ind} {...item} />
             ))}
-
           </div>
-
           {/* Charts and Analytics Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             <PlanDistribution plans={plans} />
             <RecentSubs />
           </div>
-
-
         </div>
-
       </div>
 
   );

@@ -24,15 +24,13 @@ const menuItems: MenuItem[] = [
   { name: 'Restaurants', icon: BuildingStorefrontIcon, href: '/restaurants' },
   { name: 'Plans', icon: UsersIcon, href: '/plans' },
   { name: 'Reports', icon: ChartBarIcon, href: '/reports' },
-  { name: 'Supports', icon: ChartBarIcon, href: '/supports' },
-  { name: 'Settings', icon: Cog6ToothIcon, href: '/settings' },
+  // { name: 'Supports', icon: ChartBarIcon, href: '/supports' },
+  // { name: 'Settings', icon: Cog6ToothIcon, href: '/settings' },
 ];
 
 export const Sidebar: React.FC = () => {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
-
-
   return (
     <div
       className={`${collapsed ? 'w-20' : 'w-64'
