@@ -114,14 +114,13 @@ export const RestaurantTable: React.FC<RestaurantTableProps> = ({
                       {restaurant.subscription.plan}
                     </span>
                   </td>
-
+                  
                   {/* Dates */}
                   <td className="px-6 py-2">
                     <div className="flex flex-col text-xs  gap-1">
                       <div className="flex items-center gap-1">
                         <CalendarIcon className="h-3 w-3 text-emerald-500" />
                         <span>{restaurant.subscription.startDate}</span>-<span>{restaurant.subscription.endDate}</span>
-
                       </div>
                     </div>
                   </td>

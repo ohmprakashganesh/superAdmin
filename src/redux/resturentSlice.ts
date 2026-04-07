@@ -15,6 +15,7 @@ const initialState: RestaurantState = {
   selectedPlan:null,
   isFormOpen:false,
   isProfileOpen:false,
+  sideStatus:false,
 };
 
 // Async thunks
@@ -132,6 +133,9 @@ const restaurantSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+    setSideStatus:(state)=>{
+      state.sideStatus=!state.sideStatus;
+    }
   },
   extraReducers: (builder) => {  
     builder
@@ -186,5 +190,5 @@ const restaurantSlice = createSlice({
   },
 });
 
-export const { setSelectedRestaurant,setSelectedPlan, clearError,cancelModal,openEditForm,openProfile } = restaurantSlice.actions;
+export const { setSelectedRestaurant,setSelectedPlan, clearError,cancelModal,openEditForm,openProfile,setSideStatus } = restaurantSlice.actions;
 export default restaurantSlice.reducer;

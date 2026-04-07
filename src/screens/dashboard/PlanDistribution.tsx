@@ -38,16 +38,16 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
     },
   ];
   return (
-     <div className="lg:col-span-1 bg-white rounded-xl border p-6">
+     <div className="lg:col-span-2 bg-white rounded-xl border py-3 px-6">
               <h3 className="text-lg font-bold text-gray-800 mb-4">Plan Distribution</h3>
-              <div className="space-y-4">
+              <div className="space-y-2">
                 {planBreakdown.map((plan) => (
                   <div key={plan.plan}>
                     <div className="flex justify-between text-sm mb-1">
                       <span className="font-medium text-gray-700">{plan.plan}</span>
                       <span className="text-gray-600">{plan.subscriberCount} subscribers</span>
                     </div>
-                    <div className="w-full bg-gray-200 h-6 rounded-full overflow-hidden">
+                    <div className="w-full bg-gray-200 h-5  rounded-full overflow-hidden">
                       <div 
                         className={`${plan.color} h-full`}
                         style={{ width: `${plan.percentage}%` }}

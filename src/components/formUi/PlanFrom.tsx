@@ -67,13 +67,13 @@ export const PlanForm: React.FC<PlanFormProps> = ({
   };
 
   return (
-    <Card className="p-0 overflow-hidden border-none shadow-2xl bg-white">
-      <div className="bg-gray-50 px-6 py-4 border-b flex justify-between items-center">
+    <Card className="p-0 overflow-hidden   z-50  border-none shadow-2xl bg-white">
+      <div className="bg-gray-50  py-4 border-b flex justify-between items-center">
         <h2 className="text-xl font-bold">{selectedPlan ? 'Edit Plan' : 'Create Plan'}</h2>
         <button onClick={() => setShowForm(false)}><X /></button>
       </div>
 
-      <form onSubmit={handleSubmit} className="p-6 space-y-4">
+      <form onSubmit={handleSubmit} className=" mt-3 space-y-3">
         <div className="grid grid-cols-2 gap-4">
           <Input label="Name" name="name" value={formData.name} onChange={handleChange} error={errors.name} />
           <Input label="Slug" name="slug" value={formData.slug} onChange={handleChange} error={errors.slug} />

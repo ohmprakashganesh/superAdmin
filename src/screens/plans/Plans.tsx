@@ -4,6 +4,7 @@ import type { Plan } from "./planType";
 import PrimaryBtn from "../../components/ui/PrimaryBtn";
 import { PlanForm } from "../../components/formUi/PlanFrom";
 import { usePlan } from "../../hooks/usePlan";
+import { PlusIcon } from "lucide-react";
 
 const Plans: React.FC = () => {
   const [showForm, setShowForm] = useState<boolean>(false);
@@ -49,19 +50,6 @@ const Plans: React.FC = () => {
 
   return (
     <div className="grid grid-cols-3 gap-6 p-6">
-      <div className="col-span-3 flex justify-end pb-8">
-        <div className="w-1/6">
-          <PrimaryBtn
-            onClick={() => {
-              selectPlan(null); // Reset for new entry
-              setShowForm(true);
-            }}
-          >
-            Add Plan
-          </PrimaryBtn>
-        </div>
-      </div>
-      
       <div className="grid col-span-3 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-6">
         {plans.map((plan: Plan) => (
           <PlanCard
@@ -74,8 +62,8 @@ const Plans: React.FC = () => {
       </div>
 
       {showForm && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="w-full max-w-4xl p-2">
+        <div className='absolute bg-black/50 overflow-scroll inset-0 z-50 w-full h-screen '>
+          <div className='mx-auto lg:w-[70%] md:w-[55%] w-full px-5 mt-10 h-fit py-5'>
             <PlanForm
               selectedPlan={selectedPlan}
               setShowForm={setShowForm}
@@ -84,6 +72,18 @@ const Plans: React.FC = () => {
           </div>
         </div>
       )}
+
+      
+         <div className=' absolute bottom-10 right-10 flex justify-center items-center '>
+            <PrimaryBtn
+                onClick={() => {
+              selectPlan(null); // Reset for new entry
+              setShowForm(true);
+            }}
+            >
+              <PlusIcon className=" md:size-5  lg:size-5 size-3  " />
+            </PrimaryBtn>
+          </div>
     </div>
   );
 };

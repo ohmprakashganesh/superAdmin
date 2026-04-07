@@ -79,7 +79,7 @@ const Restaurants: React.FC = () => {
             <PrimaryBtn
               onClick={() => showEditForm(null)}
             >
-              <PlusIcon className=" w-5 h-5 mr-2" />
+              <PlusIcon className=" md:size-5  lg:size-5 size-3  " />
             </PrimaryBtn>
           </div>
         )}</div>
@@ -92,9 +92,8 @@ const Restaurants: React.FC = () => {
                    loading={loading}
                  />
       {isFormOpen && (
-        <div className='absolute bg-black/50 overflow-scroll inset-0 w-screen h-screen '>
+        <div className='absolute bg-black/50 overflow-scroll inset-0 z-50 w-full h-screen '>
           <div className='mx-auto lg:w-[70%] md:w-[55%] w-full mt-10 h-fit py-5'>
-
             <RestaurantForm
               initialData={selectedRestaurant}
               onSubmit={selectedRestaurant ? handleUpdateRestaurant : handleCreateRestaurant}

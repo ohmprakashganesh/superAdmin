@@ -13,6 +13,7 @@ import {
   openProfile,
   cancelModal,
   fetchPlans, 
+  setSideStatus,
 } from '../redux/resturentSlice';
 
 import type { Restaurant } from '../types/types';
@@ -25,6 +26,7 @@ export const useRestaurants = () => {
     error, 
     selectedRestaurant, 
     isFormOpen, 
+    sideStatus,
     isProfileOpen 
   } = useSelector((state: RootState) => state.restaurants);
 
@@ -60,12 +62,19 @@ export const useRestaurants = () => {
     return dispatch(cancelModal()); 
   };
 
+   const toggleSidebar=()=>{
+    return dispatch(setSideStatus());
+   }
+
  return {
+    
     restaurants,
     loading,
     error,
     selectedRestaurant,
-    isFormOpen,    // Now correctly returned from selector
+    isFormOpen, 
+    sideStatus, 
+      // Now correctly returned from selector
     isProfileOpen, // Now correctly returned from selector
     addRestaurant,
     editRestaurant,
@@ -74,5 +83,6 @@ export const useRestaurants = () => {
     showEditForm,
     showProfile,
     closeModal,
+    toggleSidebar,
   };
 };

@@ -1,16 +1,14 @@
 // components/common/Sidebar.tsx
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 
 import {
   HomeIcon,
   BuildingStorefrontIcon,
   UsersIcon,
   ChartBarIcon,
-  Cog6ToothIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon
 } from '@heroicons/react/24/outline';
+import { useRestaurants } from '../../hooks/useResturents';
 
 interface MenuItem {
   name: string;
@@ -20,79 +18,62 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  { name: 'Dashboard', icon: HomeIcon, href: '/', active: true },
+  { name: 'Dashboard', icon: HomeIcon, href: '/' },
   { name: 'Restaurants', icon: BuildingStorefrontIcon, href: '/restaurants' },
   { name: 'Plans', icon: UsersIcon, href: '/plans' },
-  { name: 'Reports', icon: ChartBarIcon, href: '/reports' },
-  // { name: 'Supports', icon: ChartBarIcon, href: '/supports' },
-  // { name: 'Settings', icon: Cog6ToothIcon, href: '/settings' },
+  // { name: 'Reports', icon: ChartBarIcon, href: '/reports' },
 ];
 
 export const Sidebar: React.FC = () => {
-  const location = useLocation();
-  const [collapsed, setCollapsed] = useState(false);
-  return (
-    <div
-      className={`${collapsed ? 'w-20' : 'w-64'
-        } bg-gray-900 text-white h-screen transition-all duration-300 flex flex-col`}
+    const{toggleSidebar,sideStatus}=useRestaurants();
+    return (
+   <div
+      className={`
+      fixed md:static
+      top-0 left-0 min-h-screen 
+      bg-white w-[250px] md:w-[200px] lg:w-[250px] 
+      transform transition-transform duration-300
+      ${sideStatus? "translate-x-0" : "-translate-x-full "}
+      md:translate-x-0
+      z-30 
+      `}
     >
-      <div className="flex items-center justify-between p-4 border-b border-gray-700">
-        {!collapsed && (
-          <span className="text-xl font-bold">Super Admin</span>
-        )}
+      <div className="flex justify-between items-center p-4">
+        <h1 className="text-lg font-bold text-primary-dark  ">ADMIN</h1>
+
+        {/* Close button (mobile only) */}
         <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="p-1 rounded-lg hover:bg-gray-700"
+          className="md:hidden text-xl"
+          onClick={toggleSidebar}
         >
-          {collapsed ? (
-            <ChevronRightIcon className="w-5 h-5" />
-          ) : (
-            <ChevronLeftIcon className="w-5 h-5" />
-          )}
+          ✕
         </button>
       </div>
 
-      <nav className="flex-1 overflow-y-auto py-4">
-        <ul className="space-y-2 px-2">
-          {menuItems.map((item) => {
-              const isActive=location.pathname===item.href;
-              return  (
+      <ul className="space-y-3 px-3 mt-4">
+      {menuItems.map((item, index) => {
+      const Icon = item.icon;
 
-              <li key={item.name}>
-                <a
-                  href={item.href}
-                  className={`
-                  flex items-center p-3 rounded-lg transition-colors
-                  ${isActive
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-800'
-                    }
-                  ${collapsed ? 'justify-center' : 'space-x-3'}
-                `}
-                >
-                  <item.icon className="w-5 h-5" />
-                  {!collapsed && <span>{item.name}</span>}
-                </a>
-              </li>
-            )
-          }
-        )}
-        </ul>
-      </nav>
-
-      <div className="p-4 border-t border-gray-700">
-        <div className={`flex items-center ${collapsed ? 'justify-center' : 'space-x-3'}`}>
-          <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
-            <span className="text-sm font-medium">SA</span>
-          </div>
-          {!collapsed && (
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate">Admin User</p>
-              <p className="text-xs text-gray-400 truncate">admin@super.com</p>
-            </div>
-          )}
-        </div>
-      </div>
+  return (
+    <NavLink
+      key={index}
+      to={item.href}
+      onClick={toggleSidebar}
+      className={({ isActive }) =>
+        `flex items-center gap-3 py-2 px-3 rounded-md
+        ${
+          isActive
+            ? "bg-primary text-white"
+            : "hover:bg-orange-100 text-gray-700"
+        }`
+      }
+    >
+      <Icon className="w-5 h-5" />
+      <span>{item.name}</span>
+    </NavLink>
+  );
+})}
+      </ul>
     </div>
   );
 };

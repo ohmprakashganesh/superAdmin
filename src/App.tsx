@@ -9,6 +9,7 @@ import Setting from './screens/setting/Setting'
 import Dashboard from './screens/dashboard/Dashboard'
 import Report from './screens/report/Report'
 import Reports from './screens/reports/Reports'
+import Login from './components/common/Login'
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
            <Route path='/reports' element={<Report />}/>
            <Route path='/settings' element={<Setting />} />
           </Route>     
+             <Route path='/login' element={<Login/>} />
+
         </Routes>
     </Provider>
     

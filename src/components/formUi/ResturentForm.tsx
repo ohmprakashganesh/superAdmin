@@ -113,7 +113,7 @@ export const RestaurantForm: React.FC<RestaurantFormProps> = ({
     icon: any;
     title: string;
   }) => (
-    <div className="col-span-2 flex items-center gap-2 border-b border-gray-100 pb-2 mb-4 mt-4">
+    <div className="col-span-2  flex items-center gap-2 border-b border-gray-100 pb-2 mb-4 mt-4">
       <Icon size={18} className="text-blue-600" />
       <h3 className="text-sm font-bold uppercase tracking-wider text-gray-500">
         {title}

@@ -8,7 +8,7 @@ const RecentSubs = () => {
         .slice(0, 5);
     
   return (
-    <div className="lg:col-span-2 bg-white rounded-xl border p-6">
+    <div className="lg:col-span-3 bg-white rounded-xl border p-6">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-bold text-gray-800">Recent Subscribers</h3>
                 <Link to="/restaurants">
@@ -19,15 +19,15 @@ const RecentSubs = () => {
                   </Link>
               </div>
               
-              <div className="space-y-3">
+              <div className="space-y-1">
                 {recentSubscribers.map((company) => (
                   <div 
                     key={company.id}
                     onClick={() => onViewCompany(company.id)}
-                    className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition group"
+                    className="flex items-center justify-between  hover:bg-gray-50 rounded-lg cursor-pointer transition group"
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-white ${
+                      <div className={`size-8 rounded-lg flex items-center justify-center font-bold text-white ${
                         company.packageTier === 'Basic' ? 'bg-blue-500' :
                         company.packageTier === 'Premium' ? 'bg-purple-500' : 'bg-indigo-500'
                       }`}>

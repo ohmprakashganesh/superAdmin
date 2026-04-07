@@ -38,6 +38,7 @@ export interface RestaurantState {
   selectedPlan:Plan |null;
   isFormOpen:boolean;
   isProfileOpen:boolean;
+  sideStatus:boolean;
 }
 
 export interface ApiResponse<T> {
